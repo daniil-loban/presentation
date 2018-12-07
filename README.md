@@ -1,6 +1,6 @@
 # presentation
 
-created on the basis of the Raveal.JS by framework (https://github.com/hakimel/reveal.js)
+created on the basis of the Reveal.JS by framework (https://github.com/hakimel/reveal.js)
 
 published at https://daniil-loban.github.io/presentation/
 
