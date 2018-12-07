@@ -1,0 +1,35 @@
+.multi-column {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  text-align: left;
+}
+.multi-column .col {
+  display: table-cell;
+  vertical-align: top;
+  padding: 1% 0 1% 2%;
+}
+
+.multi-column .col .caption {
+  font-size: 0.6em;
+  font-family: "Courier", sans;
+  font-weight: bold;
+}
+
+.multi-column .col pre{
+  width: 100%;
+  font-size: 0.65em;
+}
+
+.multi-column .col:first-of-type {
+  padding-left: 0;
+}
+
+.line-through{
+    text-decoration: line-through;
+}
+
+.table td {
+    font-size: .7em;
+}
+

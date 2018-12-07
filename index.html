@@ -1,0 +1,632 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/beige.css">
+    <!-- for this presentation only -->
+    <link rel="stylesheet" href="css/presentation.css"> 
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h1><img width="600" height="450" src="img/sass_logo.png" alt="sass" style="border: 0px solid white; box-shadow: 0 0 0 rgba(0, 0, 0, 0);"></h1>
+          <aside class="notes">
+            <p><b>Welcome</b> to Sass.
+              Sass is an <b>advanced</b> version of CSS.
+              As a matter of fact, any <b>valid CSS</b> is valid Sass.
+            </p>
+          </aside>
+        </section>
+        <section>
+          <ul> 
+            <li>Import</li>
+            <li>Nesting</li>
+            <li>Variables</li>
+            <li>Extends</li>
+            <li>Mixins</li>
+            <li>Calculating a Layout</li>
+            <li>Conditional expressions</li>
+            <li>Loops : for / each / while</li>
+            <li>Functions</li>
+          </ul> 
+          <aside class="notes">
+            <p>
+              Sass just adds features on top of CSS, it’s a kind of meta language. 
+              Unfortunately, at this point, no browsers support Sass files directly, so we write some Sass and then we compile or convert Sass into CSS. 
+            </p>
+          </aside>
+        </section>
+        <section>
+          <h2>Import</h2>
+          <div class="multi-column">
+            <div class='col'> 
+              <span class="caption">base.scss file +</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  @import 'reset';
+
+                  body {
+                    font: 90% Moon, sans-serif;
+                    background-color: #efefef;
+                  }
+                  ```
+                </script>
+              </pre>
+            </div>
+            <div class='col'>
+              <span class="caption">_reset.scss file =</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  html,
+                  body,
+                  ul,
+                  ol {
+                    margin:  0;
+                    padding: 0;
+                  }
+                  ```
+                </script>
+              </pre>
+            </div>
+            <div class='col'> 
+              <span class="caption">main.css:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  html, body, ul, ol {
+                    margin: 0;
+                    padding: 0;
+                  }
+
+                  body {
+                    font: 90% Moon, sans-serif;
+                    background-color: #efefef;
+                  }
+                  ```
+                </script>
+              </pre>
+            </div>
+          </div>
+          <aside class="notes">
+            <p>
+              Sass will take the file that you want to import and combine it with the file you're importing into, so you can serve a single CSS file to the web browser.      
+            </p>
+          </aside>
+        </section>
+        <section>
+          <section>
+            <h2 class="line-through">Nesting</h2>
+            <div class="multi-column">
+              <div class='col'>
+                <span class="caption">CSS style</span>
+                <pre data-markdown>
+                  <script type="text/template">
+                    ```
+                    .infobox                 { width: 200px; }
+                    .infobox .message        { border: 1px solid red; }
+                    .infobox .message .title { color: red; }
+                    .infobox .user           { border: 2px solid black; }
+                    .infobox .user .title    { color: black; }
+                    ```
+                  </script>
+                </pre>
+              </div>
+            </div>
+            <aside class="notes">
+              <p>
+                Look how much repetition there is in this file.
+              </p>            
+            </aside>  
+          </section>
+          <section>
+            <h2>Nesting</h2>
+            <div class="multi-column">
+              <div class='col'>
+                <span class="caption">Sass (SCSS) style </span>
+                <pre data-markdown>
+                  <script type="text/template">
+                    ```
+                    .infobox {
+                      width: 200px;
+                      .message {
+                        border: 1px solid red;
+                        .title {
+                          color: red; } }
+                      .user {
+                        border: 2px solid black;
+                        .title {
+                          color: black; } } }
+                    ```
+                  </script>
+                </pre>
+              </div>
+              <div class='col'> 
+                <span class="caption">This compiles to:</span>
+                <pre data-markdown>
+                  <script type="text/template">
+                    ```
+                    .infobox {
+                      width: 200px; }
+                      .infobox .message {
+                        border: 1px solid red; }
+                        .infobox .message .title {
+                          color: red; }
+                      .infobox .user {
+                        border: 2px solid black; }
+                        .infobox .user .title {
+                          color: black; }
+                    ```
+                  </script>
+                </pre>
+              </div>
+            </div>
+            <aside class="notes">
+              <p>
+                See it in Sass.
+                Using nesting we can easily get the combinations of selectors we need, simply by putting one block with the CSS rules into another. 
+                It turns out compact and clear, because we know exactly what it depends on.
+              </p>
+            </aside>
+          </section>
+        </section>
+        <section>
+          <h2>Variables</h2>
+          <div class="multi-column">
+            <div class='col'>
+              <span class="caption">Example:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  $font-stack: Moon, sans-serif;
+                  $primary-color: #333;
+
+                  body {
+                    font: 90% $font-stack;
+                    color: $primary-color;
+                  }
+                  ```
+                </script>
+              </pre>
+            </div>
+            <div class='col'> 
+              <span class="caption">This compiles to:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  body {
+                    font: 90% Moon, sans-serif;
+                    color: #333;
+                  }
+                  ```
+                </script>
+              </pre>
+            </div>
+          </div>
+          <aside class="notes">
+            <p>
+              All variables in Sass are prefixed with a $ sign. 
+              Assigning a variable looks a lot like typing in a CSS property. 
+              Variables allow you to store some values and then substitute them in the right place in the code. 
+              Thus, we set the value in one place, and Sass already duplicates it on its own. 
+            </p>
+          </aside>        
+        </section>
+        <section>
+          <h2>Extends</h2>
+          <div class="multi-column">
+            <div class='col'>
+              <span class="caption">Example:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  .blue_button {
+                    background: #336699;
+                    font-weight: bold;
+                    color: white;
+                    padding: 5px; }
+
+                  .checkout_button {
+                    @extend .blue_button }
+                  ```
+                </script>
+              </pre>
+            </div>
+            <div class='col'> 
+              <span class="caption">This compiles to:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  .blue_button, .checkout_button {
+                    background: #336699;
+                    font-weight: bold;
+                    color: white;
+                    padding: 5px; }
+                  ```
+                </script>
+              </pre>
+            </div>
+          </div>
+          <aside class="notes">
+            <p>
+              Extend clones the attributes from one class or ID and adds them to another.
+              Say we want to use the blue button style for the checkout button. 
+              All we need to do is use @extend, followed by the blue button class in the declaration of your selector.
+            </p>
+          </aside>    
+        </section>
+        <section>
+          <h2>Mixins</h2>
+          <div class="multi-column">
+            <div class='col'>
+              <span class="caption">Example:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  @mixin border-radius($radius) {
+                    -webkit-border-radius: $radius;
+                       -moz-border-radius: $radius;
+                        -ms-border-radius: $radius;
+                            border-radius: $radius;
+                  }
+
+                  .box { @include border-radius(10px); }
+                  ```
+                </script>
+              </pre>
+            </div>
+            <div class='col'> 
+              <span class="caption">This compiles to:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  .box {
+                    -webkit-border-radius: 10px;
+                    -moz-border-radius: 10px;
+                    -ms-border-radius: 10px;
+                    border-radius: 10px;
+                  }
+                  ```
+                </script>
+              </pre>
+            </div>
+          </div>
+          <aside class="notes">
+            <p>
+              Mix ins are some of the more powerful elements of Sass. 
+              They are analogs of functions in programming languages.
+              A mix in is a fragment of Sass that can easily be applied to another selector.
+              Mix ins can include arguments that allow you to vary your values.
+              To define a mix in, all you need to type is @mixin, followed by the name of the mix in and then its styling.
+              When you want to use the mix in, just type @include 
+              It’s useful to have mix ins in a separate style sheet, keeping your main style sheet cleaner.            
+            </p>            
+          </aside>    
+        </section>        
+        <section>
+          <h2>Calculating a Layout</h2>
+          <div class="multi-column">
+            <div class='col'>
+              <span class="caption">Example:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  $width: 500px;
+                  $sidebar_percent: 0.2;
+
+                  #page {
+                    width: $width;
+                    #sidebar {
+                      width: $width * $sidebar_percent; }
+                    #content {
+                      width: $width * (1 - $sidebar_percent); }
+                  }
+                  ```
+                </script>
+              </pre>
+            </div>
+            <div class='col'> 
+              <span class="caption">This compiles to:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  #page {
+                    width: 500px; }
+                    #page #sidebar {
+                      width: 100px; }
+                    #page #content {
+                      width: 400px; }
+                  ```
+                </script>
+              </pre>
+            </div>
+          </div>
+          <aside class="notes">
+            <p>
+              In Sass, you can add, subtract, multiply and divide different sizes, getting new values.
+              All this is easily combined with variables, so we do not need to calculate many things on our own. 
+              If you mix units, Sass will try to make them work, but if they are incompatible, Sass will display an error.
+              For instance, you can’t multiply a px value by a em value. It just doesn’t make sense.
+            </p>
+          </aside>            
+        </section>
+        <section>
+          <h2>Conditional expressions</h2>
+          <div class="multi-column">
+            <div class='col'>
+              <span class="caption">Example:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  @mixin country_color($country) {
+                    @if $country == france {
+                      color: blue; }
+                    @else if $country == spain {
+                      color: yellow; }
+                    @else if $country == italy {
+                      color: green; }
+                    @else {
+                      color: red; } }
+
+                  .england {
+                    @include country_color(england); }
+                  .france {
+                    @include country_color(france); }
+                  ```
+                </script>
+              </pre>
+            </div>
+            <div class='col'> 
+              <span class="caption">This compiles to:</span>
+              <pre data-markdown>
+                <script type="text/template">
+                  ```
+                  .england {
+                    color: red; }
+                  .france {
+                    color: blue; }
+                  ```
+                </script>
+              </pre>
+            </div>
+          </div>
+          <aside class="notes">
+            <p>
+              Virtually no programming language can do without the if and else statements.
+              In Sass, it is also possible to execute a set of commands only if the specified conditions are true.
+              There are lots of situations where we might want our mix ins to act smart and react to the values that we pass in.
+            </p>
+          </aside>    
+        </section>
+        <section>
+          <section>
+            <h2>Loops</h2>
+            <div class="multi-column">
+              <div class='col'>
+                <span class="caption">The @for directive:</span>
+                <pre data-markdown>
+                  <script type="text/template">
+                    ```
+                    // The @for directive comes in two forms:
+                    // 1)  @for $var from <start> through <end>
+                    // 2)  @for $var from <start> to <end>
+
+                    @for $i from 1 through 3 {
+                      .item-#{$i} { width: 2em * $i; }
+                    }
+                    ```
+                  </script>
+                </pre>
+              </div>
+              <div class='col'> 
+                <span class="caption">This compiles to:</span>
+                <pre data-markdown>
+                  <script type="text/template">
+                    ```
+                    .item-1 {
+                      width: 2em; }
+                    .item-2 {
+                      width: 4em; }
+                    .item-3 {
+                      width: 6em; }
+                    ```
+                  </script>
+                </pre>
+              </div>
+            </div>
+            <aside class="notes">
+              <p>
+                Using cycles, you can make repetitions of code fragments that differ only slightly.
+                The 'for' directive comes in two forms:
+                the keyword 'through' specifies the range including both the values of 'start' and 'end'.
+                the keyword 'to' specifies the range from 'start' value to the value before 'end' value.             
+              </p>
+            </aside>    
+          </section>
+          <section>
+            <h2>Loops</h2>
+            <div class="multi-column">
+              <div class='col'>
+                <span class="caption">The @each directive:</span>
+                <pre data-markdown>
+                  <script type="text/template">
+                    ```
+                    @each $user in thom, jonny, colin, phil {
+                      .#{$user}_picture {
+                      background-image: url("/img/#{$user}.jpg"); 
+                      }
+                    }
+                    ```
+                  </script>
+                </pre>
+              </div>
+              <div class='col'> 
+                <span class="caption">This compiles to:</span>
+                <pre data-markdown>
+                  <script type="text/template">
+                    ```
+                    .thom_picture {
+                      background-image: url("/img/thom.jpg"); }
+                    .jonny_picture {
+                      background-image: url("/img/jonny.jpg"); }
+                    .colin_picture {
+                      background-image: url("/img/colin.jpg"); }
+                    .phil_picture {
+                      background-image: url("/img/phil.jpg"); }  
+                    ```
+                  </script>
+                </pre>
+              </div>
+            </div>
+            <aside class="notes">
+              <p>
+                The 'each' directive is a trick to keep your Sass DRY (the tenet of Don’t Repeat Yourself). 
+                It’s a way of copying the same style for a lot of different variables.              
+              </p>
+            </aside>                          
+          </section>
+          <section>
+            <h2>Loops</h2>
+            <div class="multi-column">
+              <div class='col'>
+                <span class="caption">The @while directive:</span>
+                <pre data-markdown>
+                  <script type="text/template">
+                    ```
+                    $types: 4;
+                    @while $types > 0 {
+                      .column-#{$types}{
+                        width: $type - width + $types
+                      }
+                      $types: $types - 1
+                    }
+                    ```
+                  </script>
+                </pre>
+              </div>
+              <div class='col'> 
+                <span class="caption">This compiles to:</span>
+                <pre data-markdown>
+                  <script type="text/template">
+                    ```
+                    .column-4 {
+                      width: 24px; }
+                    .column-3 {
+                      width: 23px; }
+                    .column-2 {
+                      width: 22px; }
+                    .column-1 {
+                      width: 21px; }
+                    ```
+                  </script>
+                </pre>
+              </div>
+            </div>
+            <aside class="notes">
+              <p>
+                The 'while' directive takes a SassScript expression and repeatedly emits the nested block of styles until the statement evaluates to false.
+              </p>
+            </aside>                
+          </section>
+        </section>
+        <section>
+          <h2>Functions</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Example</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Strings</td>
+                <td>unquote("hello")</td>
+                <td>hello</td>
+              </tr>
+              <tr>
+                <td>Numeric</td>
+                <td>min(3, 5, -2, 7, 0)</td>
+                <td>-2</td>
+              </tr>
+              <tr>
+                <td>List</td>
+                <td>nth(1 2 3, 2)</td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>Map</td>
+                <td>map-has-key(("red": #ff0000, "green": #00ff00), blue)</td>
+                <td>false</td>
+              </tr>
+              <tr>
+                <td>Selector</td>
+                <td>selector-append(p, ".foo")</td>
+                <td>"p.foo"</td>
+              </tr>
+              <tr>
+                <td>Introspection</td>
+                <td>type-of(1 2 3)</td>
+                <td>"list"</td>
+              </tr>
+              <tr>
+                <td>Color</td>
+                <td>invert(#ad4038)</td>
+                <td>#52bfc7</td>
+              </tr>
+            </tbody>
+          </table>
+          <aside class="notes">
+            Sass offers a variety of functions.
+            To learn more about functions check out the Sass documentation.
+          </aside>
+        </section>
+        <section>
+          <h3 style="color: #0395d2; font-weight: bold;" >What does this rebus mean?</h3>
+          <img width="500" height="568" src="img/sass.png" alt="sass" style="border: 0px solid white; box-shadow: 0 0 0 rgba(0, 0, 0, 0);">
+          <aside class="notes">
+            just for fun
+          </aside>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info about config & dependencies:
+      // - https://github.com/hakimel/reveal.js#configuration
+      // - https://github.com/hakimel/reveal.js#dependencies
+      Reveal.initialize({
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
