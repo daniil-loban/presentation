@@ -8,7 +8,7 @@ TRANSCRIPT:
 
 INTRODUCTION
 
-Welcome to Sass.
+Let's start our join into the world of Sass.
 Sass is an advanced version of CSS.
 As a matter of fact, any valid CSS is valid Sass.
 
